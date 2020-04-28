@@ -1,29 +1,57 @@
 const assert = require("chai").assert;
-let ExampleCode = require('../src/ExampleCode');
+let Game = require('../src/Game');
 
+describe('Game', () => {
+    let game;
 
-describe('Example', function () {
-    it('should fail', function () {
-        assert.isTrue(false);
-    });
-    it('should pass', function () {
-        assert.isTrue(true);
+    beforeEach(() =>  {
+        game = new Game();
     });
 
-    var testValues = [
-        {input: 1, expected: "1"},
-        {input: 2, expected: "2"},
-    ];
+    it('Game can roll', () => {
+        game.roll(0);
+    });
 
-    testValues.forEach(function (test) {
-            it(`gives ${test.expected} for ${test.input}`, function () {
-                assert.equal(test.expected, `${test.input}`);
-            });
+    it('roll 0 should score 0', () => {
+        game.roll(0);
+        rollMany(19,0);
+        assert.equal(game.getScore(),0);
+    });
+
+    it('roll 1 should score 1', () => {
+        game.roll(1);
+        rollMany(19,0);
+        assert.equal(game.getScore(), 1);
+    });
+
+    it('10 pins down in two roll should score a spare', () => {
+        game.roll(5);
+        game.roll(5);
+        game.roll(5);
+        rollMany(17,0);
+        assert.equal(game.getScore() ,20);
+    });
+
+    it('10 pins down in one roll should score a strike', () => {
+        game.roll(10);
+        game.roll(5);
+        game.roll(5);
+        rollMany(17,0);
+        assert.equal(game.getScore() ,30);
+    });
+
+    it('10 pins down in last one roll should score a strike', () => {
+        game.roll(10);
+        game.roll(5);
+        game.roll(5);
+        rollMany(17,0);
+        assert.equal(game.getScore() ,30);
+    });
+
+    function rollMany( times, pinDown) {
+        for(var i = 0; i < times; i++) {
+            game.roll(pinDown);
         }
-    );
+    }
 
-    it('should return correct text', function () {
-        let exampleCode = new ExampleCode();
-        assert.equal(exampleCode.coveredFunction(), "covered text")
-    });
 });
